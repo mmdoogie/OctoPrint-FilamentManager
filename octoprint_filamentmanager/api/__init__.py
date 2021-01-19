@@ -409,3 +409,19 @@ class FilamentManagerApi(octoprint.plugin.BlueprintPlugin):
         else:
             connection.close()
             return make_response("", 204)
+
+    @octoprint.plugin.BlueprintPlugin.route("/odometer", methods=["GET"])
+    def get_odometer(self):
+        try:
+            odo = self.filamentOdometer
+            ext = odo.get_extrusion()
+            if ext is not None:
+                return jsonify(extrusion=ext)
+            else:
+                self._logger.warn("Unable to retrieve extrusion from odometer.")
+                return make_response("Unable to retrieve extrusion from odometer. Is it enabled?", 500)
+        except Exception as e:
+            self._logger.error("Failed to retrieve extrusion from odometer: {message}"
+                               .format(message=str(e)))
+            return make_response("Failed to retrieve extrusion from odometer. Is it enabled?", 500)
+

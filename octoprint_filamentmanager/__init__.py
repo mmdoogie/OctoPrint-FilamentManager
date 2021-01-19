@@ -243,6 +243,7 @@ class FilamentManagerPlugin(FilamentManagerApi,
             if self.odometerEnabled:
                 self.odometerEnabled = False  # disabled because we don't want to track manual extrusion
                 self.update_filament_usage()
+                self.filamentOdometer.reset_extruded_length()
 
         # update last print state
         self.lastPrintState = payload['state_id']
